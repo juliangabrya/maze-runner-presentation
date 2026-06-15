@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maze Runner — autonomous maze-solving robot</title>
+<meta name="description" content="A micro:bit + CutebotPro robot that solves a maze it has never seen. Built by Abhi, Julian C, Julian G & Sam." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#f3f7ff; --muted:#9aa7cf; --lime:#62ffb0; --cyan:#38e8ff; --magenta:#ff5ad0; --amber:#ffd24a;
+    --hair:rgba(150,170,255,.24);
+    --display:'Unbounded',sans-serif; --body:'Outfit',sans-serif; --mono:'Space Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{font-family:var(--body);color:var(--ink);overflow-x:hidden;
+    background:
+      radial-gradient(1100px 700px at 85% 8%,rgba(40,180,160,.26),transparent 60%),
+      radial-gradient(900px 700px at 8% 12%,rgba(150,60,220,.28),transparent 60%),
+      linear-gradient(160deg,#160a3a 0%,#120b34 42%,#0c1740 72%,#08222e 100%);
+    background-attachment:fixed;-webkit-font-smoothing:antialiased}
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+  .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:clamp(30px,6vw,80px) clamp(22px,5vw,56px)}
+
+  header{display:flex;flex-direction:column;gap:18px;margin-bottom:46px}
+  .tag{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--lime);
+    display:flex;align-items:center;gap:13px}
+  .tag::before{content:"";width:36px;height:1px;background:var(--lime);box-shadow:0 0 12px var(--lime)}
+  h1{font-family:var(--display);font-weight:800;text-transform:uppercase;line-height:.92;letter-spacing:-.01em;
+    font-size:clamp(48px,10vw,128px);
+    background:linear-gradient(100deg,#eafff6 0%,#62ffb0 38%,#38e8ff 66%,#eafff6 100%);background-size:220% auto;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 7s linear infinite}
+  @keyframes shine{to{background-position:220% center}}
+  .sub{font-size:clamp(16px,2.2vw,22px);font-weight:300;color:#d8e0ff;max-width:64ch;line-height:1.55}
+  .meta{display:flex;flex-wrap:wrap;gap:26px;margin-top:6px}
+  .meta div .k{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;display:block}
+  .meta div .v{font-family:var(--display);font-size:18px;color:var(--ink);margin-top:3px}
+
+  .cta{display:inline-flex;align-items:center;gap:14px;margin-top:34px;align-self:flex-start;
+    font-family:var(--display);font-weight:600;font-size:19px;text-decoration:none;color:#08210f;
+    background:linear-gradient(90deg,#62ffb0,#38e8ff);padding:18px 30px;border-radius:14px;
+    box-shadow:0 18px 44px -16px rgba(98,255,176,.6);transition:transform .2s,box-shadow .2s}
+  .cta:hover{transform:translateY(-3px);box-shadow:0 24px 54px -16px rgba(98,255,176,.8)}
+  .cta .arrow{font-size:22px}
+
+  .section-label{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);
+    margin:54px 0 18px;display:flex;align-items:center;gap:13px}
+  .section-label::after{content:"";flex:1;height:1px;background:var(--hair)}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media(max-width:880px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  .deck{position:relative;display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);
+    padding:24px 22px;border-radius:16px;border:1px solid var(--hair);overflow:hidden;
+    background:linear-gradient(160deg,rgba(96,82,210,.18),rgba(40,30,90,.26));backdrop-filter:blur(8px);
+    transition:transform .25s cubic-bezier(.2,.7,.2,1),border-color .25s,box-shadow .25s}
+  .deck::before{content:"";position:absolute;left:0;top:0;height:100%;width:4px;background:var(--ac,var(--lime));box-shadow:0 0 18px var(--ac,var(--lime))}
+  .deck:hover{transform:translateY(-6px);border-color:var(--ac,var(--lime));box-shadow:0 26px 56px -26px rgba(0,0,0,.6),inset 0 0 0 1px var(--ac,var(--lime))}
+  .deck .swatch{height:64px;border-radius:10px;margin-bottom:6px;border:1px solid rgba(255,255,255,.12)}
+  .deck h3{font-family:var(--display);font-size:19px;font-weight:600}
+  .deck .role{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .deck p{font-size:13.5px;color:#cdd6f5;line-height:1.5;margin-top:4px}
+  .deck .go{font-family:var(--mono);font-size:12px;color:var(--ac,var(--lime));margin-top:auto;padding-top:10px}
+
+  .flagship{grid-column:1/-1;display:grid;grid-template-columns:1.4fr 1fr;gap:0;padding:0}
+  @media(max-width:880px){.flagship{grid-template-columns:1fr}}
+  .flagship .body{padding:30px}
+  .flagship .vis{background:
+    radial-gradient(circle at 70% 40%,rgba(98,255,176,.4),transparent 55%),
+    radial-gradient(circle at 40% 70%,rgba(56,232,255,.35),transparent 55%),
+    linear-gradient(135deg,#1a1048,#0a1a3a);min-height:200px;position:relative}
+  .flagship .vis::after{content:"NEXUS";position:absolute;right:18px;bottom:14px;font-family:var(--display);
+    font-weight:800;font-size:34px;color:rgba(255,255,255,.14);letter-spacing:.04em}
+  .flagship .role{color:var(--lime)}
+  .flagship h3{font-size:26px;margin:6px 0}
+
+  footer{margin-top:60px;padding-top:26px;border-top:1px solid var(--hair);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+  footer b{color:var(--lime)}
+</style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <div class="wrap">
+    <header>
+      <div class="tag">micro:bit · cutebot pro · autonomous robotics</div>
+      <h1>Maze<br>Runner</h1>
+      <p class="sub">A self-driving robot that feels its way through a maze it has never seen — with three distance sensors, one elegant rule, and a radio that hands the answer to the next robot.</p>
+      <div class="meta">
+        <div><span class="k">Team</span><span class="v">Abhi · Julian C · Julian G · Sam</span></div>
+        <div><span class="k">Platform</span><span class="v">micro:bit V2 · CutebotPro</span></div>
+        <div><span class="k">Runtime</span><span class="v">~20 min · 22 slides</span></div>
+      </div>
+      <a class="cta" href="index-nexus.html"><span class="arrow">▶</span> Open the presentation</a>
+    </header>
+
+    <div class="section-label">the presentation</div>
+    <div class="grid">
+      <a class="deck flagship" href="index-nexus.html" style="--ac:var(--lime)">
+        <div class="vis"></div>
+        <div class="body">
+          <span class="role">recommended · governor edition</span>
+          <h3>Nexus</h3>
+          <p>The full 22-slide talk: the team, the hardware, the live maze demo with its real-time "thinking" panel, results, real-world impact, and a Q&amp;A — wrapped in an animated neural-network &amp; data-grid theme.</p>
+          <span class="go">launch presentation →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-label">alternate themes (same talk, different look)</div>
+    <div class="grid">
+      <a class="deck" href="index-neon.html" style="--ac:var(--lime)">
+        <div class="swatch" style="background:linear-gradient(135deg,#070a0b,#0b1013);box-shadow:inset 0 0 24px rgba(182,255,58,.3)"></div>
+        <span class="role">tactical</span><h3>Neon HUD</h3>
+        <p>Dark mission-control with phosphor-green telemetry.</p>
+        <span class="go">open →</span>
+      </a>
+      <a class="deck" href="index-editorial.html" style="--ac:var(--cyan)">
+        <div class="swatch" style="background:linear-gradient(135deg,#f3eee4,#e9e0d0)"></div>
+        <span class="role">refined</span><h3>Editorial</h3>
+        <p>Ink-on-warm-paper, serif type, the maze drawn by hand.</p>
+        <span class="go">open →</span>
+      </a>
+      <a class="deck" href="index-city.html" style="--ac:var(--magenta)">
+        <div class="swatch" style="background:linear-gradient(135deg,#1b0640,#a81d8e)"></div>
+        <span class="role">synthwave</span><h3>Neon City</h3>
+        <p>Starfield, glowing skyline and reflections.</p>
+        <span class="go">open →</span>
+      </a>
+      <a class="deck" href="brief.html" style="--ac:var(--amber)">
+        <div class="swatch" style="background:linear-gradient(135deg,#0c1740,#08222e);box-shadow:inset 0 0 24px rgba(56,232,255,.3)"></div>
+        <span class="role">for presenters</span><h3>Q&amp;A Brief</h3>
+        <p>One-page cheat-sheet, glossary &amp; likely questions.</p>
+        <span class="go">open →</span>
+      </a>
+    </div>
+
+    <footer>
+      <span>MAZE RUNNER · micro:bit · CutebotPro</span>
+      <span>Built by <b>Abhi · Julian C · Julian G · Sam</b></span>
+    </footer>
+  </div>
+
+<script>
+  // lightweight starfield
+  (function(){
+    const c=document.getElementById('stars'); if(!c)return; const x=c.getContext('2d');
+    let w,h,st,F=0;
+    function resize(){ w=c.width=innerWidth; h=c.height=innerHeight;
+      st=Array.from({length:Math.floor(w*h/7000)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,p:Math.random()*6.3,s:.5+Math.random()*1.6,g:Math.random()<.2})); }
+    resize(); addEventListener('resize',resize);
+    (function loop(){ F++; x.clearRect(0,0,w,h);
+      for(const s of st){ const a=Math.max(0,.25+.5*Math.sin(F*.02*s.s+s.p));
+        x.fillStyle=s.g?'rgba(255,216,120,'+a+')':'rgba(220,230,255,'+a+')';
+        x.beginPath(); x.arc(s.x,s.y,s.r,0,7); x.fill(); }
+      requestAnimationFrame(loop); })();
+  })();
+</script>
+</body>
+</html>
