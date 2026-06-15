@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maze Runner — Speaker Script (printable)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#181c28;--muted:#6a7286;--green:#0f9b63;--blue:#2b5fd0;--amber:#b07a1e;--mag:#c23a86;--paper:#fcfbf7;--hair:#e4e0d6;
+    --display:'Unbounded',sans-serif;--body:'Outfit',sans-serif;--mono:'Space Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);color:var(--ink);background:var(--paper);line-height:1.5;padding:clamp(20px,4vw,48px)}
+  .wrap{max-width:840px;margin:0 auto}
+  .nav{margin-bottom:16px} .nav a{font-family:var(--mono);font-size:12px;color:var(--blue);text-decoration:none}
+  header{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+  .tag{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,4.5vw,40px);margin-top:6px}
+  .hint{color:var(--muted);font-size:14px;margin-top:8px}
+  .hint b{color:var(--ink)}
+  .slide{padding:18px 0;border-bottom:1px solid var(--hair);break-inside:avoid}
+  .head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:7px}
+  .no{font-family:var(--mono);font-size:13px;color:var(--muted);min-width:26px}
+  .ttl{font-family:var(--display);font-weight:700;font-size:18px}
+  .who{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:#fff;background:var(--green);padding:4px 10px;border-radius:999px}
+  .who.t{background:var(--blue)} .who.team{background:var(--mag)}
+  .say{font-size:15.5px;color:#2a2f3c;padding-left:38px;position:relative}
+  .say::before{content:"“";position:absolute;left:14px;top:-4px;font-size:26px;color:var(--green);font-family:Georgia,serif}
+  .lines{padding-left:38px;display:grid;gap:6px;margin-top:2px}
+  .lines .l{font-size:15px}.lines .l b{color:var(--green);font-family:var(--mono);font-size:12px}
+  .cue{padding-left:38px;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--mag)}
+  .cue b{color:var(--mag)}
+  footer{margin-top:24px;color:var(--muted);font-family:var(--mono);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  @media print{body{padding:0 10mm}.nav{display:none} a{color:var(--ink);text-decoration:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="index.html">← back to presentation</a> &nbsp;·&nbsp; <a href="javascript:print()">🖨 print</a></div>
+  <header>
+    <div class="tag">speaker script · ~20 minutes</div>
+    <h1>What to say, slide by slide</h1>
+    <p class="hint">Aim for <b>~50 seconds a slide</b>. These are prompts, not a word-for-word read — say it naturally. <b>Julian&nbsp;G</b> leads; everyone narrates a piece of the live demo. Pause and breathe on the demo.</p>
+  </header>
+
+  <div class="slide"><div class="head"><span class="no">01</span><span class="ttl">Cover — Maze Runner</span><span class="who">Julian G</span></div>
+    <p class="say">Good afternoon. We're Abhi, Julian, Julian and Sam — and this is <b>Maze Runner</b>, a robot we built that solves a maze it has never seen before. In the next twenty minutes we'll show you how it works — and then it'll solve a real maze, live.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">02</span><span class="ttl">The team</span><span class="who team">Everyone</span></div>
+    <div class="lines">
+      <div class="l"><b>Abhi:</b> I worked on the decision logic — the brain that picks each turn.</div>
+      <div class="l"><b>Julian C:</b> I handled the sensors and tuning.</div>
+      <div class="l"><b>Julian G:</b> I built the run loop and the radio.</div>
+      <div class="l"><b>Sam:</b> and I did the testing, the motors, and the demo.</div>
+    </div></div>
+
+  <div class="slide"><div class="head"><span class="no">03</span><span class="ttl">Why it matters</span><span class="who">Julian G</span></div>
+    <p class="say">Why does this matter? A robot that finds its way somewhere new, with no map, is the same idea behind warehouse robots, Mars rovers, and the vacuum at home. We built a small, honest version — and we'll prove it works in front of you.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">04</span><span class="ttl">The mission</span><span class="who">Julian G</span></div>
+    <p class="say">Here's the challenge. The robot starts completely blind — no map, no GPS. All it gets is three numbers: how far the wall is to its left, right and front. From those alone it has to decide every turn until it finds the goal.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">05</span><span class="ttl">The hardware</span><span class="who t">Sam</span></div>
+    <p class="say">It's built from standard kit. A micro:bit — a little classroom computer — sits on a two-wheeled robot car. Three laser sensors measure the walls, and the built-in radio lets it share the answer. Nothing exotic — the cleverness is all in the code.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">06</span><span class="ttl">The cast (architecture)</span><span class="who t">Julian C</span></div>
+    <p class="say">We split the software into four jobs: eyes that read the sensors, a brain that decides, legs that drive, and a voice that broadcasts the route. A small main program conducts the four of them.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">07</span><span class="ttl">How it sees</span><span class="who t">Julian C</span></div>
+    <p class="say">Each sensor fires a laser and times the bounce — and that becomes a distance in millimetres. A wall reads small, about a hundred; an open corridor reads big, over three hundred. So "open" or "wall" is just a number compared to a threshold.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">08</span><span class="ttl">The heartbeat (loop)</span><span class="who t">Abhi</span></div>
+    <p class="say">The whole robot is one loop, running about twenty times a second: sense the walls, classify them, decide a turn, act. Sense, decide, act — over and over, until it's solved.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">09</span><span class="ttl">The decision, in code</span><span class="who t">Abhi</span></div>
+    <p class="say">Here's the actual decision. If the corridor ahead is clear, it just cruises. At a junction it stops and asks: is this the goal? If not, it picks a direction — by priority.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">10</span><span class="ttl">The strategy — left-hand rule</span><span class="who">Julian G</span></div>
+    <p class="say">And the priority is the magic. It's the left-hand rule: always keep your left hand on the wall. Left first, then forward, then right, and only turn back at a dead end. Follow that and you are <b>mathematically guaranteed</b> to reach the exit of any maze.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">11</span><span class="ttl">★ LIVE DEMO</span><span class="who team">All four</span></div>
+    <div class="lines">
+      <div class="l"><b>Julian G:</b> Let's see it. This is our real maze — the same one on screen and on the floor.</div>
+      <div class="l"><b>Abhi:</b> Watch the panel — it senses the three walls…</div>
+      <div class="l"><b>Julian C:</b> …runs down its priority list and rejects the closed paths…</div>
+      <div class="l"><b>Sam:</b> …and drives. The pink line is its trail — and there's the goal.</div>
+    </div>
+    <p class="cue"><b>CUE:</b> press <b>A</b> on the robot to run the real maze · <b>Random Maze</b> on screen shows it works on any layout · press <b>B</b> to stop.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">12</span><span class="ttl">The dials (tuning)</span><span class="who t">Julian C</span></div>
+    <p class="say">Real sensors are noisy and motors drift, so we calibrated these numbers by hand — the distance that counts as "open", the trim that keeps it driving straight. Small tweaks, big difference.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">13</span><span class="ttl">The thought process</span><span class="who t">Abhi</span></div>
+    <p class="say">A few design choices worth a mention: we stop to decide so the lasers give clean readings; we trim one motor to cancel drift; and we record every move, so a second robot can replay it.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">14</span><span class="ttl">Explore once, run forever</span><span class="who t">Sam</span></div>
+    <p class="say">That's the clever part — explore once, run forever. The first robot solves it slowly and records the turns, then radios them to a second robot, which runs the route at full speed without thinking.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">15</span><span class="ttl">Problems we had to beat</span><span class="who t">Abhi</span></div>
+    <p class="say">It wasn't smooth at first. The sensors read rubbish while moving, so we stop at each junction. The motors drifted, so we trimmed them. And a naïve rule can loop forever — the left-hand rule fixed that for good.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">16</span><span class="ttl">What it achieves</span><span class="who">Julian G</span></div>
+    <p class="say">The result: it solves the maze a hundred percent of the time, making about twenty decisions a second, then hands the route to a second robot. Explore once, replay forever.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">17</span><span class="ttl">Where this idea goes</span><span class="who t">Sam</span></div>
+    <p class="say">And it's not just a toy. The same loop runs warehouse robots, search-and-rescue robots in places with no map, and the robot vacuum on your floor.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">18</span><span class="ttl">Skills we built</span><span class="who t">Sam</span></div>
+    <p class="say">Building it, we learned to code and think logically, to debug real hardware — not just code on a screen — to work as a team, and to keep going through a lot of failed runs.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">19</span><span class="ttl">Good for every student</span><span class="who t">Julian C</span></div>
+    <p class="say">For school, it turns abstract lessons into something you can watch move — it links maths, computing and physics — and it runs on affordable kit any class can reuse.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">20</span><span class="ttl">Where we take it next</span><span class="who">Julian G</span></div>
+    <p class="say">Next, we want it to find the shortest path, take on bigger mazes, do timed speed-runs, and eventually a whole swarm of robots sharing maps over radio.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">21</span><span class="ttl">Thank you</span><span class="who">Julian G</span></div>
+    <p class="say">That's Maze Runner — three sensors, one rule, a solved maze. Thank you for watching. We'd love to take your questions.</p></div>
+
+  <div class="slide"><div class="head"><span class="no">22</span><span class="ttl">Q&amp;A</span><span class="who team">Everyone</span></div>
+    <p class="say">We're happy to answer anything — how it works, what we learned, or where it goes next.</p>
+    <p class="cue"><b>TIP:</b> keep the <b>brief.html</b> answers handy for tricky questions.</p></div>
+
+  <footer>
+    <span>MAZE RUNNER · speaker script</span>
+    <span>Abhi · Julian C · Julian G · Sam</span>
+  </footer>
+</div>
+</body>
+</html>

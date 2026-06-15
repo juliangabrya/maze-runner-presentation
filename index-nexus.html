@@ -65,17 +65,16 @@
     padding:clamp(28px,5vw,90px);padding-bottom:clamp(74px,9vh,116px);
     overflow-y:auto;
     opacity:0;visibility:hidden;
-    transform:translateY(34px) scale(.975);
-    filter:blur(7px);
-    transition:opacity .5s ease,transform .62s cubic-bezier(.16,.84,.3,1),filter .5s ease,visibility .5s;
+    transform:translateY(16px);
+    transition:opacity .42s ease,transform .5s cubic-bezier(.16,.84,.3,1),visibility .42s;
   }
-  .slide.active{opacity:1;visibility:visible;transform:none;filter:none}
-  .slide.past{transform:translateY(-34px) scale(.975);filter:blur(7px)}
+  .slide.active{opacity:1;visibility:visible;transform:none}
+  .slide.past{transform:translateY(-16px)}
 
   /* stagger children of the active slide */
-  .slide.active [data-rise]{animation:rise .8s cubic-bezier(.16,.84,.3,1) both}
-  .slide.active [data-rise]{animation-delay:calc(var(--i,0)*.09s + .14s)}
-  @keyframes rise{from{opacity:0;transform:translateY(34px) scale(.95);filter:blur(7px)}to{opacity:1;transform:none;filter:blur(0)}}
+  .slide.active [data-rise]{animation:rise .55s cubic-bezier(.16,.84,.3,1) both}
+  .slide.active [data-rise]{animation-delay:calc(var(--i,0)*.06s + .1s)}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
   /* ---------- shared type ---------- */
   .kicker{
@@ -390,10 +389,9 @@
       <div class="titlewrap">
         <div class="kicker" data-rise style="--i:0">micro:bit · cutebot pro · autonomous robotics</div>
         <h1 data-rise style="--i:1">Maze<br><span style="position:relative">Runner<span class="ghost" aria-hidden="true">Runner</span></span></h1>
-        <p class="lead" data-rise style="--i:2" style="margin-top:26px">
-          A self-driving robot that feels its way through an unknown maze with three
-          distance sensors, a left-hand-rule brain, and a radio that broadcasts the
-          solution the instant it reaches the goal.
+        <p class="lead" data-rise style="--i:2;margin-top:26px">
+          A robot that solves a maze it has never seen — three sensors, one rule,
+          and a radio that hands the answer to the next robot.
         </p>
         <div class="cover-row" data-rise style="--i:3">
           <div class="cover-meta">
@@ -426,8 +424,8 @@
       <h2 data-rise style="--i:1">Robots that find<br>their own way</h2>
       <div class="cols c2">
         <div data-rise style="--i:2">
-          <p class="lead">A machine that can navigate somewhere it has never been — with no map — is the same idea behind warehouse robots, planetary rovers and the vacuum that cleans your floor.</p>
-          <p class="lead" style="margin-top:16px">We built a small, honest version of that problem: <span class="lime">sense the world, make a decision, act, repeat</span> — and prove it works, live, in front of you.</p>
+          <p class="lead">Navigating somewhere you've never been, with no map, powers warehouse robots, rovers and robot vacuums.</p>
+          <p class="lead" style="margin-top:16px">We built a small version of that problem: <span class="lime">sense, decide, act, repeat</span> — and prove it live.</p>
         </div>
         <div class="cols" data-rise style="--i:3;grid-template-columns:1fr 1fr;gap:16px">
           <div class="card stat" style="--accent:var(--lime)"><span class="num">3</span><span class="lab">distance sensors</span></div>
@@ -445,16 +443,13 @@
       <div class="cols c2">
         <div data-rise style="--i:2">
           <p class="lead">
-            The robot starts blind. There's no map, no GPS, no memory of the maze.
-            All it has is three numbers — how far the wall is to its
-            <span class="cyan">left</span>, <span class="cyan">right</span>, and
-            <span class="cyan">front</span>, measured in millimetres.
+            The robot starts blind — no map, no GPS. Its only inputs are three numbers:
+            distance to the wall on its <span class="cyan">left</span>, <span class="cyan">right</span> and
+            <span class="cyan">front</span>, in millimetres.
           </p>
           <p class="lead" style="margin-top:18px">
-            From those three numbers alone it must decide, junction by junction,
-            which way to turn — and keep going until it spots the goal. Then it
-            <span class="mag">replays the whole route over radio</span> so a second
-            robot can run it perfectly.
+            From those it decides every turn until it finds the goal — then
+            <span class="mag">radios the route</span> to a second robot.
           </p>
         </div>
         <div class="card" data-rise style="--i:3" style="--accent:var(--cyan)">
@@ -473,10 +468,10 @@
       <div class="kicker" data-rise style="--i:0">the hardware</div>
       <h2 data-rise style="--i:1">What it's made of</h2>
       <div class="cols c4">
-        <div class="card" data-rise style="--i:2" style="--accent:var(--lime)"><span class="role">the computer</span><h3>micro:bit V2</h3><p>A pocket-sized board with a processor, 5×5 LED screen, buttons and built-in radio — the brain that runs all our code.</p></div>
-        <div class="card" data-rise style="--i:3" style="--accent:var(--cyan)"><span class="role">the chassis</span><h3>CutebotPro</h3><p>A two-wheeled robot car with precise PWM motor control — it turns our decisions into movement.</p></div>
-        <div class="card" data-rise style="--i:4" style="--accent:var(--magenta)"><span class="role">the senses</span><h3>3× ToF sensors</h3><p>Time-of-Flight lasers that measure distance to the walls on the left, right and front — in millimetres.</p></div>
-        <div class="card" data-rise style="--i:5" style="--accent:var(--amber)"><span class="role">the link</span><h3>2.4GHz radio</h3><p>The micro:bit's built-in radio lets one robot broadcast a solved route to another — no wires.</p></div>
+        <div class="card" data-rise style="--i:2" style="--accent:var(--lime)"><span class="role">the computer</span><h3>micro:bit V2</h3><p>Pocket-sized board with an LED screen and built-in radio — runs all our code.</p></div>
+        <div class="card" data-rise style="--i:3" style="--accent:var(--cyan)"><span class="role">the chassis</span><h3>CutebotPro</h3><p>Two-wheeled robot car with precise motor control — turns decisions into movement.</p></div>
+        <div class="card" data-rise style="--i:4" style="--accent:var(--magenta)"><span class="role">the senses</span><h3>3× ToF sensors</h3><p>Lasers that measure distance to the left, right and front walls in millimetres.</p></div>
+        <div class="card" data-rise style="--i:5" style="--accent:var(--amber)"><span class="role">the link</span><h3>2.4GHz radio</h3><p>Built-in radio broadcasts a solved route to a second robot — no wires.</p></div>
       </div>
       <p class="lead muted" data-rise style="--i:6" style="margin-top:28px;font-size:16px">All off-the-shelf, classroom-friendly kit — the cleverness is entirely in the <span class="lime">code</span>.</p>
     </section>
@@ -508,8 +503,7 @@
         </div>
       </div>
       <p class="lead muted" data-rise style="--i:6" style="margin-top:30px;font-size:16px">
-        The main program is a thin <span class="lime">conductor</span> — it owns the loop and the
-        tuning numbers, and orchestrates these four specialists.
+        The main program is a thin <span class="lime">conductor</span> that orchestrates these four specialists.
       </p>
     </section>
 
@@ -519,8 +513,8 @@
       <h2 data-rise style="--i:1">From laser pulse<br>to a decision</h2>
       <div class="cols c2">
         <div data-rise style="--i:2">
-          <p class="lead">Each sensor fires an invisible laser pulse and times how long it takes to bounce back. That time becomes a <span class="cyan">distance in millimetres</span>.</p>
-          <p class="lead" style="margin-top:16px">A nearby wall reads small — around <span class="lime">110&nbsp;mm</span>. An open corridor reads large — <span class="lime">330&nbsp;mm</span> or more. One number per direction is all the brain needs.</p>
+          <p class="lead">Each sensor times a laser pulse bouncing off the wall — turning it into a <span class="cyan">distance in millimetres</span>.</p>
+          <p class="lead" style="margin-top:16px">A wall reads small (~<span class="lime">110&nbsp;mm</span>); an open corridor reads large (<span class="lime">330&nbsp;mm</span>+). One number per direction is all it needs.</p>
           <div class="pills" style="margin-top:22px">
             <span class="pill">left &nbsp;<b>330 mm</b></span>
             <span class="pill">front <b>110 mm</b></span>
@@ -851,7 +845,7 @@ const dots=[...dotsWrap.children];
 
 // who presents each slide
 // Julian G leads the main slides; Abhi, Julian C & Sam take the smaller ones
-const SPEAKERS=['Julian G','The Team','Julian G','Julian G','Sam','Julian C','Julian C','Abhi','Abhi','Julian G','Julian G','Julian C','Abhi','Sam','Abhi','Julian G','Sam','Sam','Julian C','Julian G','Julian G','Abhi · Julian C · Julian G · Sam'];
+const SPEAKERS=['Julian G','The Team','Julian G','Julian G','Sam','Julian C','Julian C','Abhi','Abhi','Julian G','The Team','Julian C','Abhi','Sam','Abhi','Julian G','Sam','Sam','Julian C','Julian G','Julian G','Abhi · Julian C · Julian G · Sam'];
 const spkName=document.getElementById('spk-name');
 
 // terminal "decode" text scramble

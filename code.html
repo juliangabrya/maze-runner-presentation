@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maze Runner — robot code (copy to micro:bit)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#f3f7ff;--muted:#9aa7cf;--lime:#62ffb0;--cyan:#38e8ff;--magenta:#ff5ad0;--amber:#ffd24a;--hair:rgba(150,170,255,.24);
+    --display:'Unbounded',sans-serif;--body:'Outfit',sans-serif;--mono:'Space Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);color:var(--ink);line-height:1.55;min-height:100vh;
+    background:radial-gradient(1000px 600px at 85% 0%,rgba(40,180,160,.2),transparent 60%),
+      radial-gradient(800px 600px at 5% 10%,rgba(150,60,220,.22),transparent 60%),
+      linear-gradient(160deg,#160a3a,#0c1740 70%,#08222e);background-attachment:fixed;padding:clamp(22px,5vw,56px)}
+  .wrap{max-width:920px;margin:0 auto}
+  .nav a{font-family:var(--mono);font-size:12px;color:var(--cyan);text-decoration:none}
+  .tag{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--lime);
+    display:flex;align-items:center;gap:12px;margin:16px 0 12px}
+  .tag::before{content:"";width:30px;height:1px;background:var(--lime);box-shadow:0 0 12px var(--lime)}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.0;
+    background:linear-gradient(100deg,#eafff6,#62ffb0 40%,#38e8ff 70%,#eafff6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{color:#d8e0ff;font-size:clamp(15px,2vw,18px);margin-top:10px;max-width:72ch}
+  .steps{display:grid;gap:10px;margin:22px 0}
+  .steps li{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;font-size:15px;color:#d8e0ff}
+  .steps li b{color:var(--lime)}
+  .num{font-family:var(--mono);font-weight:700;color:#08210f;background:var(--lime);width:24px;height:24px;border-radius:7px;
+    display:grid;place-items:center;font-size:12px;flex:none}
+  .bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0 10px}
+  .btn{font-family:var(--display);font-weight:600;font-size:15px;color:#08210f;cursor:pointer;border:none;
+    background:linear-gradient(90deg,#62ffb0,#38e8ff);padding:13px 22px;border-radius:11px;
+    box-shadow:0 12px 30px -12px rgba(98,255,176,.6);transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)} .btn.copied{background:linear-gradient(90deg,#ffd24a,#ff5ad0)}
+  .dl{font-family:var(--mono);font-size:13px;color:var(--cyan);text-decoration:none;border:1px solid var(--hair);
+    padding:12px 18px;border-radius:11px}
+  pre{background:rgba(8,8,26,.78);border:1px solid var(--hair);border-radius:14px;padding:22px;overflow:auto;
+    max-height:62vh;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:#dfe6ff;
+    box-shadow:inset 0 0 60px rgba(56,232,255,.05)}
+  .note{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px}
+  .note b{color:var(--lime)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="index.html">← back to presentation</a></div>
+  <div class="tag">robot firmware · makecode</div>
+  <h1>The code — solves any maze</h1>
+  <p class="sub">This is the micro:bit program. It uses the <b style="color:var(--lime)">left-hand rule</b> (LEFT → FORWARD → RIGHT → BACK) and runs until it reaches the goal — so it solves <b style="color:var(--lime)">any</b> perfect maze, not just five moves. Copy it straight into MakeCode and flash.</p>
+
+  <ol class="steps">
+    <li><span class="num">1</span><div>Go to <b>makecode.microbit.org</b> and open your robot project (the one with the <span style="font-family:var(--mono)">PathPlanning</span> / <span style="font-family:var(--mono)">ChannelNav</span> extensions).</div></li>
+    <li><span class="num">2</span><div>Click the <b>{ } JavaScript</b> toggle at the top to switch to the code view.</div></li>
+    <li><span class="num">3</span><div>Select all, delete, then <b>paste</b> the code below (use the Copy button).</div></li>
+    <li><span class="num">4</span><div>Plug in the micro:bit and click <b>Download</b> to flash it. Press <b>A</b> to solve, <b>B</b> to reset.</div></li>
+  </ol>
+
+  <div class="bar">
+    <button class="btn" id="copy">⧉ Copy the code</button>
+    <a class="dl" href="maze-runner.ts" download>↓ download maze-runner.ts</a>
+  </div>
+  <p class="note">What changed from the old version: priority is now <b>LEFT → FORWARD → RIGHT → BACK</b> (true left-hand rule), and the <b>5-move cap is gone</b> — it loops until the goal. <span style="color:var(--muted)">Uses your existing extensions, so it drops straight in.</span></p>
+
+  <pre><code id="code"></code></pre>
+</div>
+
+<script type="text/plain" id="src">// ============================================================
+//  MAZE RUNNER — micro:bit + CutebotPro
+//  Left-hand rule with NO move cap: runs until it reaches the goal,
+//  so it solves any perfect maze 100% of the time.
+//  Paste this into the JavaScript view of MakeCode, then flash.
+//  Button A = explore & solve · Button B = stop / reset
+// ============================================================
+
+let walls: number[] = []
+let wallFront = 0
+let wallLeft = 0
+let wallRight = 0
+
+let moveCount = 0
+let running = false
+
+let rawRoute: PathPlanning.Dir[] = []
+let endedAtGoal = false
+
+let RADIO_GROUP = 1
+
+let DRIVE_SPEED = 25
+let MOTOR_BIAS = 6
+
+let FRONT_CLEAR_MM = 170
+let FRONT_STOP_MM = 170
+let SIDE_OPEN_MM = 300
+let GOAL_SIDE_MM = 400
+let GOAL_FRONT_MM = 250
+
+let BLIND_DRIVE_CM = 15
+let OVERSHOOT_CM = 8
+let ORIENT_BAIL_MM = 65
+
+let DO_ORIENT = true
+let DO_CENTRE = true
+
+let currentJunction: PathPlanning.IntersectionType = 0
+let chosenDirection: PathPlanning.Dir = PathPlanning.Dir.FORWARD
+
+function applySettings() {
+    PathPlanning.applyRobotSettings(
+        RADIO_GROUP,
+        true,
+        DRIVE_SPEED,
+        SIDE_OPEN_MM,
+        FRONT_STOP_MM,
+        GOAL_SIDE_MM,
+        GOAL_FRONT_MM,
+        BLIND_DRIVE_CM,
+        OVERSHOOT_CM,
+        ORIENT_BAIL_MM,
+        DO_ORIENT,
+        DO_CENTRE
+    )
+}
+
+function resetRun() {
+    moveCount = 0
+    endedAtGoal = false
+    rawRoute = []
+    PathPlanning.resetExplorer()
+    CutebotPro.pwmCruiseControl(0, 0)
+}
+
+input.onButtonPressed(Button.B, function () {
+    running = false
+    PathPlanning.stopDriving()
+    CutebotPro.pwmCruiseControl(0, 0)
+    resetRun()
+    radio.sendString("ROUTE_RESET")
+    basic.showIcon(IconNames.No)
+    basic.pause(200)
+    basic.clearScreen()
+})
+
+input.onButtonPressed(Button.A, function () {
+    if (running) return
+
+    applySettings()
+    resetRun()
+    running = true
+    basic.showIcon(IconNames.Target)
+
+    // No move cap — keep going until we reach the GOAL (or B is pressed).
+    while (running) {
+
+        // --- SENSE ---
+        walls = ChannelNav.readSensors("tx-classify")
+        wallLeft = walls[0]
+        wallRight = walls[1]
+        wallFront = walls[2]
+
+        // --- CLASSIFY ---
+        currentJunction = PathPlanning.classifyJunction(wallLeft, wallRight, wallFront)
+        let leftOpen = PathPlanning.isLeftOpen(currentJunction)
+        let rightOpen = PathPlanning.isRightOpen(currentJunction)
+        let frontClear = wallFront > FRONT_CLEAR_MM
+
+        // Open corridor with no turn available -> just keep rolling.
+        if (frontClear && !leftOpen && !rightOpen) {
+            CutebotPro.pwmCruiseControl(DRIVE_SPEED, DRIVE_SPEED + MOTOR_BIAS)
+        } else {
+            // Stop to decide at the junction.
+            CutebotPro.pwmCruiseControl(0, 0)
+
+            // Reached the goal? celebrate and finish.
+            if (PathPlanning.isGoal(currentJunction)) {
+                PathPlanning.celebrate()
+                endedAtGoal = true
+                running = false
+                break
+            }
+
+            // --- DECIDE: LEFT-HAND RULE ---
+            // Priority: LEFT -> FORWARD -> RIGHT -> BACK
+            // (this is the change that makes it solve ANY perfect maze)
+            if (leftOpen) {
+                chosenDirection = PathPlanning.Dir.LEFT
+            } else if (frontClear) {
+                chosenDirection = PathPlanning.Dir.FORWARD
+            } else if (rightOpen) {
+                chosenDirection = PathPlanning.Dir.RIGHT
+            } else {
+                chosenDirection = PathPlanning.Dir.BACK
+            }
+
+            // --- ACT ---
+            rawRoute.push(chosenDirection)
+            moveCount++
+            PathPlanning.sendDecision(currentJunction, chosenDirection)
+            PathPlanning.turnRobot(chosenDirection)
+        }
+
+        basic.pause(50)
+    }
+
+    CutebotPro.pwmCruiseControl(0, 0)
+    running = false
+
+    // Broadcast the solved route so a second robot can replay it.
+    if (rawRoute.length > 0 || endedAtGoal) {
+        RouteRadio.sendRoute(rawRoute, endedAtGoal)
+        basic.showIcon(IconNames.Yes)
+    }
+})
+
+applySettings()
+basic.showIcon(IconNames.Heart)
+basic.pause(200)
+basic.clearScreen()
+</script>
+<script>
+  const src=document.getElementById('src').textContent;
+  document.getElementById('code').textContent=src;
+  const btn=document.getElementById('copy');
+  btn.onclick=async()=>{ try{ await navigator.clipboard.writeText(src);
+    btn.textContent='✓ Copied!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='⧉ Copy the code';btn.classList.remove('copied');},1800);
+  }catch(e){ const r=document.createRange();r.selectNode(document.getElementById('code'));
+    getSelection().removeAllRanges();getSelection().addRange(r);document.execCommand('copy'); btn.textContent='✓ Copied!'; } };
+</script>
+</body>
+</html>

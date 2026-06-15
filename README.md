@@ -16,6 +16,9 @@ Open **`index.html`** (the landing page) and click **Open the presentation**, or
 | `index-editorial.html` | Same talk, light ink-on-paper editorial theme |
 | `index-city.html` | Same talk, synthwave neon-city theme |
 | `brief.html` | One-page presenter cheat-sheet, glossary & likely Q&A |
+| `script.html` | Printable speaker script — slide-by-slide, who says what |
+| `maze-plan.html` | Printable build plan for the physical 5×5 demo maze |
+| `code.html` / `maze-runner.ts` | The micro:bit firmware (left-hand rule, no move cap) — copy into MakeCode |
 
 Everything is **pure HTML/CSS/JS — no build step, no dependencies.** Just open a file in any browser.
 

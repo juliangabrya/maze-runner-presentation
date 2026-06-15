@@ -129,11 +129,11 @@
     <table>
       <thead><tr><th>Speaker</th><th>Slides</th><th>—</th></tr></thead>
       <tbody>
-        <tr><td>Julian&nbsp;G <span style="color:var(--lime)">(lead)</span></td><td class="mono">main</td><td>Intro · Why it matters · Mission · The strategy · <b style="color:#fff">Live demo</b> · Results · Future · Thank-you</td></tr>
+        <tr><td>Julian&nbsp;G <span style="color:var(--lime)">(lead)</span></td><td class="mono">main</td><td>Intro · Why it matters · Mission · The strategy · Results · Future · Thank-you</td></tr>
         <tr><td>Abhi</td><td class="mono">logic</td><td>The loop · The code · Thought process · Challenges</td></tr>
         <tr><td>Julian&nbsp;C</td><td class="mono">tech</td><td>Architecture · How it sees · The dials · Impact</td></tr>
         <tr><td>Sam</td><td class="mono">build</td><td>Hardware · The hand-off · Applications · What we learned</td></tr>
-        <tr><td>Everyone</td><td class="mono">Q&amp;A</td><td>Take questions together at the end</td></tr>
+        <tr><td>Everyone</td><td class="mono">together</td><td><b style="color:#fff">Live demo</b> (all four narrate a part) · Q&amp;A at the end</td></tr>
       </tbody>
     </table>
   </section>
@@ -175,7 +175,7 @@
       <div class="card"><h3>On screen</h3><p>The demo slide shows our <span class="accent">real 5×5 maze</span> being solved live, with the thinking panel. <span class="accent">Random Maze</span> proves it works on any layout; re-open the slide to return to the real one.</p></div>
       <div class="card"><h3>On the floor</h3><p>Build it from books/boxes to the plan in <span class="accent">maze-plan.html</span>. It's guaranteed solvable by the left-hand rule. Robot starts top-left facing <b>East</b>; solution is <span class="mono" style="color:var(--lime)">R F F F L L R L R R F L</span> (12 moves).</p></div>
     </div>
-    <p style="margin-top:14px;color:#cdd6f5;font-size:14.5px">⚠ Set <span class="mono" style="color:var(--lime)">MAX_MOVES ≥ 12</span> on the robot or it stops before the goal. Full build steps &amp; diagram: <span class="mono" style="color:var(--cyan)">maze-plan.html</span>.</p>
+    <p style="margin-top:14px;color:#cdd6f5;font-size:14.5px">✓ The firmware has <b style="color:var(--lime)">no move cap</b> — it runs until the goal, solving any maze 100%. Code: <span class="mono" style="color:var(--cyan)">code.html</span> · Build steps: <span class="mono" style="color:var(--cyan)">maze-plan.html</span>.</p>
   </section>
 
   <section id="constants">
@@ -213,13 +213,13 @@
     <div class="qa">
       <details open><summary>How does it find its way with no map?</summary><div class="ans">It keeps its "left hand" on the wall. Following that one rule traces every corridor of the maze and is mathematically guaranteed to reach the exit — no map, no GPS, no memory required.</div></details>
       <details><summary>What exactly did the students build?</summary><div class="ans">All of the software: reading and interpreting the sensors, the decision logic that picks each turn, the motor control that drives and turns accurately, and the radio system that hands a solved route to a second robot. The hardware is standard kit; the cleverness is the code.</div></details>
-      <details><summary>Does it always solve the maze?</summary><div class="ans">Yes. The left-hand rule is provably guaranteed on a "perfect" maze (one with no closed loops). As an extra safety net, the code caps the number of moves so a robot can never run forever.</div></details>
+      <details><summary>Does it always solve the maze?</summary><div class="ans">Yes — 100%. The left-hand rule is mathematically guaranteed on a "perfect" maze (one with no closed loops). The code has no move cap, so it simply keeps going until it reaches the goal.</div></details>
       <details><summary>How much does it cost?</summary><div class="ans">It uses a standard micro:bit V2 and a CutebotPro — roughly £70–90 per robot — which is reused across classes year after year. No specialist or expensive hardware.</div></details>
       <details><summary>Why are there two robots?</summary><div class="ans">Exploring is slow and uncertain, but a solved maze is just a list of turns. One robot explores and records the route; it radios that route to a second robot, which replays the known-good path at full speed. Explore once, run forever.</div></details>
       <details><summary>What did the students learn?</summary><div class="ans">Coding and logical thinking, debugging real hardware (noisy sensors, drifting motors — not just code on a screen), teamwork by splitting one system into parts, and perseverance through many failed runs before it worked reliably.</div></details>
       <details><summary>How does this connect to the curriculum?</summary><div class="ans">It's hands-on computational thinking: decomposing a big problem, solving each part, and testing. It links computing, maths (distances, thresholds, geometry) and physics (sensors, motion) to a motivating real-world outcome.</div></details>
       <details><summary>What's next for the project?</summary><div class="ans">A flood-fill algorithm for shortest-path solving, larger and harder mazes, timed speed-runs of a known route, and a swarm of robots that share maps over radio to solve a maze together.</div></details>
-      <details><summary>What happens if a sensor misreads?</summary><div class="ans">We stop the robot at each junction so the lasers settle before reading, which removes most noise. The thresholds also have margin, and the move-cap stops any runaway behaviour.</div></details>
+      <details><summary>What happens if a sensor misreads?</summary><div class="ans">We stop the robot at each junction so the lasers settle before reading, which removes most noise. The thresholds also have margin, and pressing B stops it instantly if anything looks wrong.</div></details>
       <details><summary>Could it get lost or stuck in a loop?</summary><div class="ans">Not with the left-hand rule on a perfect maze — it's guaranteed to progress. If we add loops to mazes in future, we'll switch to flood-fill, which tracks where it has been.</div></details>
     </div>
   </section>

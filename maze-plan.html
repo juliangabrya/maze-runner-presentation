@@ -95,14 +95,14 @@
   <p style="margin-top:8px;color:var(--muted);font-size:14px">(R = right · L = left · F = forward · B = back, relative to the way it's facing.)</p>
 
   <div class="callout">
-    <b>One setting to check on the robot:</b> the route is 12 decisions long, so make sure <span style="font-family:var(--mono)">MAX_MOVES</span> is set to at least <b>12</b> (e.g. 15) — otherwise it will stop early and radio a partial route. Everything else can stay as tuned.
+    <b>Use the latest code:</b> the new firmware has <b>no move cap</b> — it runs the left-hand rule until it reaches the goal, so it solves this (and any) maze 100% of the time. Grab it from <span style="font-family:var(--mono)">code.html</span> and flash it before the demo.
   </div>
 
   <h2><span class="n">D</span> If it struggles on the day</h2>
   <ul>
     <li><b>Drifts into a wall:</b> nudge the <span style="font-family:var(--mono)">MOTOR_BIAS</span> a little; walls being uneven width is the usual cause.</li>
     <li><b>Misses an opening:</b> the corridor is probably wider than expected — narrow it, or it sees “open” where you meant a wall.</li>
-    <li><b>Stops short:</b> raise <span style="font-family:var(--mono)">MAX_MOVES</span>. <b>Loops or backtracks oddly:</b> a wall has a gap the sensor sees through — close it.</li>
+    <li><b>Loops or backtracks oddly:</b> a wall has a gap the sensor sees through — close it so each corridor is solid.</li>
     <li>Worst case, <b>show the on-screen demo</b> (it solves this exact maze) and talk through it — the audience still sees the algorithm work.</li>
   </ul>
 
