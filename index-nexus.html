@@ -65,16 +65,17 @@
     padding:clamp(28px,5vw,90px);padding-bottom:clamp(74px,9vh,116px);
     overflow-y:auto;
     opacity:0;visibility:hidden;
-    transform:translateY(16px);
-    transition:opacity .42s ease,transform .5s cubic-bezier(.16,.84,.3,1),visibility .42s;
+    transform:translateY(34px) scale(.975);
+    filter:blur(7px);
+    transition:opacity .5s ease,transform .62s cubic-bezier(.16,.84,.3,1),filter .5s ease,visibility .5s;
   }
-  .slide.active{opacity:1;visibility:visible;transform:none}
-  .slide.past{transform:translateY(-16px)}
+  .slide.active{opacity:1;visibility:visible;transform:none;filter:none}
+  .slide.past{transform:translateY(-34px) scale(.975);filter:blur(7px)}
 
   /* stagger children of the active slide */
-  .slide.active [data-rise]{animation:rise .55s cubic-bezier(.16,.84,.3,1) both}
-  .slide.active [data-rise]{animation-delay:calc(var(--i,0)*.06s + .1s)}
-  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .slide.active [data-rise]{animation:rise .8s cubic-bezier(.16,.84,.3,1) both}
+  .slide.active [data-rise]{animation-delay:calc(var(--i,0)*.09s + .14s)}
+  @keyframes rise{from{opacity:0;transform:translateY(34px) scale(.95);filter:blur(7px)}to{opacity:1;transform:none;filter:blur(0)}}
 
   /* ---------- shared type ---------- */
   .kicker{
