@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maze Runner — Build Plan (the real 5×5 maze)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#16213a;--muted:#5b6b86;--line:#1d2740;--green:#13a36b;--red:#e0483a;--blue:#2b6fd8;--paper:#fbf9f4;--hair:#dfd9cc;
+    --display:'Unbounded',sans-serif;--body:'Outfit',sans-serif;--mono:'Space Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);color:var(--ink);background:var(--paper);line-height:1.55;
+    background-image:radial-gradient(circle at 1px 1px,rgba(20,25,40,.05) 1px,transparent 0);background-size:22px 22px}
+  .wrap{max-width:1000px;margin:0 auto;padding:clamp(24px,5vw,56px)}
+  .tag{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);
+    display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .tag::before{content:"";width:30px;height:2px;background:var(--green)}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.0;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:clamp(15px,2vw,18px);margin-top:10px;max-width:75ch}
+  .top{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;margin-top:30px;align-items:start}
+  @media(max-width:840px){.top{grid-template-columns:1fr}}
+  .mazebox{background:#fff;border:1px solid var(--hair);border-radius:16px;padding:20px;box-shadow:0 18px 40px -28px rgba(20,25,40,.4)}
+  canvas{width:100%;height:auto;display:block}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:7px}
+  .dot{width:12px;height:12px;border-radius:3px}
+  h2{font-family:var(--display);font-weight:700;font-size:22px;margin:34px 0 6px;display:flex;align-items:baseline;gap:10px}
+  h2 .n{font-family:var(--mono);font-size:13px;color:var(--green)}
+  p,li{font-size:15px}
+  ul{margin:10px 0 0 4px;list-style:none;display:grid;gap:9px}
+  li{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start}
+  li::before{content:"▸";color:var(--green);font-weight:700}
+  .key b{color:var(--ink)}
+  .callout{background:#fff;border:1px solid var(--hair);border-left:4px solid var(--blue);border-radius:10px;padding:16px 18px;margin-top:16px}
+  .callout b{color:var(--blue)}
+  .route{font-family:var(--mono);font-size:18px;color:var(--ink);background:#fff;border:1px solid var(--hair);
+    border-radius:10px;padding:14px 18px;margin-top:12px;letter-spacing:.12em;word-spacing:.2em}
+  .route b{color:var(--green)}
+  .specs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  @media(max-width:680px){.specs{grid-template-columns:1fr}}
+  .spec{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:16px}
+  .spec .v{font-family:var(--display);font-weight:700;font-size:24px;color:var(--green)}
+  .spec .l{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--hair);color:var(--muted);font-family:var(--mono);font-size:12px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .nav{margin-bottom:18px}
+  .nav a{font-family:var(--mono);font-size:12px;color:var(--blue);text-decoration:none}
+  @media print{body{background:#fff;background-image:none}.nav{display:none}.mazebox,.spec,.callout,.route{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="index.html">← back to presentation</a></div>
+  <div class="tag">build plan · the real maze</div>
+  <h1>The 5×5 maze the robot solves</h1>
+  <p class="sub">This is the exact maze shown in the live demo. It's a "perfect" maze (no loops), so the left-hand rule is <b>guaranteed</b> to walk it from <b>START</b> to <b>GOAL</b> — every time. Build it roughly to this plan; the robot doesn't need exact measurements, just solid, consistent walls.</p>
+
+  <div class="top">
+    <div class="mazebox">
+      <canvas id="plan" width="620" height="620"></canvas>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--green)"></i> START — robot faces ▸ (East)</span>
+        <span><i class="dot" style="background:var(--red)"></i> GOAL</span>
+        <span><i class="dot" style="background:#9ab"></i> solution path</span>
+      </div>
+    </div>
+    <div>
+      <h2><span class="n">A</span> What you need</h2>
+      <ul class="key">
+        <li><b>~16 books or boxes</b> for the walls — anything solid, at least <b>12&nbsp;cm tall</b> so the sensors always hit a wall, not over it.</li>
+        <li>A flat floor about <b>1.5&nbsp;m × 1.5&nbsp;m</b>.</li>
+        <li>Tape or chalk to mark the 5×5 grid first (optional but helps).</li>
+      </ul>
+      <div class="specs">
+        <div class="spec"><div class="v">5 × 5</div><div class="l">grid cells</div></div>
+        <div class="spec"><div class="v">~30 cm</div><div class="l">corridor width</div></div>
+        <div class="spec"><div class="v">12 moves</div><div class="l">to the goal</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="n">B</span> How to build it</h2>
+  <ul>
+    <li>Mark a <b>5×5 grid</b> of squares, each roughly <b>30&nbsp;cm</b> wide — about one big book-length. They don't have to be perfect, just <b>about the same size</b>.</li>
+    <li>Walk the diagram cell by cell. Wherever the plan shows a <b>black line</b>, stand a book/box to make a wall. Wherever there's a <b>gap</b>, leave it open — that's a corridor.</li>
+    <li>Keep walls <b>solid and continuous</b> with no big gaps — the laser sensors need a surface to bounce off. Matte / non-shiny surfaces read best.</li>
+    <li>Put the robot in the <b>START</b> cell (top-left) facing <b>right (East)</b>, as the green arrow shows.</li>
+  </ul>
+
+  <h2><span class="n">C</span> What the robot will do</h2>
+  <p>From START it keeps its “left hand” on the wall. Its first move: it senses a wall ahead and an opening to its right, so it turns right and drives on. The full sequence of turns to the goal is:</p>
+  <div class="route">ROUTE&nbsp;&nbsp;→&nbsp;&nbsp;<b>R F F F L L R L R R F L</b></div>
+  <p style="margin-top:8px;color:var(--muted);font-size:14px">(R = right · L = left · F = forward · B = back, relative to the way it's facing.)</p>
+
+  <div class="callout">
+    <b>One setting to check on the robot:</b> the route is 12 decisions long, so make sure <span style="font-family:var(--mono)">MAX_MOVES</span> is set to at least <b>12</b> (e.g. 15) — otherwise it will stop early and radio a partial route. Everything else can stay as tuned.
+  </div>
+
+  <h2><span class="n">D</span> If it struggles on the day</h2>
+  <ul>
+    <li><b>Drifts into a wall:</b> nudge the <span style="font-family:var(--mono)">MOTOR_BIAS</span> a little; walls being uneven width is the usual cause.</li>
+    <li><b>Misses an opening:</b> the corridor is probably wider than expected — narrow it, or it sees “open” where you meant a wall.</li>
+    <li><b>Stops short:</b> raise <span style="font-family:var(--mono)">MAX_MOVES</span>. <b>Loops or backtracks oddly:</b> a wall has a gap the sensor sees through — close it.</li>
+    <li>Worst case, <b>show the on-screen demo</b> (it solves this exact maze) and talk through it — the audience still sees the algorithm work.</li>
+  </ul>
+
+  <footer>
+    <span>MAZE RUNNER · build plan · 5×5</span>
+    <span>Abhi · Julian C · Julian G · Sam</span>
+  </footer>
+</div>
+
+<script>
+  // same maze the demo uses — walls-present bitmask (N=1,E=2,S=4,W=8)
+  const FIXED=[[11,9,1,5,7],[10,10,12,5,3],[10,14,9,3,10],[10,9,6,10,10],[12,6,13,4,6]];
+  const N=5, c=document.getElementById('plan'), x=c.getContext('2d');
+  const S=c.width, M=34, G=S-2*M, cell=G/N, pad=cell/2;
+  const DX=[0,1,0,-1],DY=[-1,0,1,0],WN=['N','E','S','W'];
+  const open=(cx,cy,d)=>!(FIXED[cy][cx]&(1<<d));
+  // solution path via left-hand rule
+  const trail=[[0,0]]; {let px=0,py=0,h=1;
+    for(let i=0;i<100;i++){const order=[(h+3)%4,h,(h+1)%4,(h+2)%4];
+      let ch=order.find(d=>open(px,py,d)); if(ch==null)ch=(h+2)%4;
+      h=ch; px+=DX[ch]; py+=DY[ch]; trail.push([px,py]); if(px===N-1&&py===N-1)break;}}
+
+  function draw(){
+    x.clearRect(0,0,S,S);
+    // start / goal cells
+    x.fillStyle='rgba(19,163,107,.14)'; x.fillRect(M,M,cell,cell);
+    x.fillStyle='rgba(224,72,58,.14)'; x.fillRect(M+(N-1)*cell,M+(N-1)*cell,cell,cell);
+    // solution path
+    x.strokeStyle='rgba(120,150,180,.8)'; x.setLineDash([7,7]); x.lineWidth=2.5; x.beginPath();
+    trail.forEach((p,i)=>{const X=M+p[0]*cell+pad,Y=M+p[1]*cell+pad;i?x.lineTo(X,Y):x.moveTo(X,Y);});
+    x.stroke(); x.setLineDash([]);
+    // walls
+    x.strokeStyle='#1d2740'; x.lineWidth=5; x.lineCap='round';
+    for(let cy=0;cy<N;cy++)for(let cx=0;cx<N;cx++){const b=FIXED[cy][cx],X=M+cx*cell,Y=M+cy*cell;x.beginPath();
+      if(b&1){x.moveTo(X,Y);x.lineTo(X+cell,Y);}
+      if(b&4){x.moveTo(X,Y+cell);x.lineTo(X+cell,Y+cell);}
+      if(b&8){x.moveTo(X,Y);x.lineTo(X,Y+cell);}
+      if(b&2){x.moveTo(X+cell,Y);x.lineTo(X+cell,Y+cell);}
+      x.stroke();}
+    // labels
+    x.fillStyle='#13a36b'; x.font='700 15px Unbounded, sans-serif'; x.textAlign='center';
+    x.fillText('START', M+pad, M+pad-6);
+    // east arrow
+    x.strokeStyle='#13a36b'; x.lineWidth=3; x.beginPath();
+    x.moveTo(M+pad-14,M+pad+10); x.lineTo(M+pad+14,M+pad+10); x.stroke();
+    x.beginPath(); x.moveTo(M+pad+14,M+pad+10); x.lineTo(M+pad+7,M+pad+5); x.lineTo(M+pad+7,M+pad+15); x.closePath(); x.fillStyle='#13a36b'; x.fill();
+    x.fillStyle='#e0483a'; x.fillText('GOAL', M+(N-1)*cell+pad, M+(N-1)*cell+pad+5);
+  }
+  draw();
+</script>
+</body>
+</html>

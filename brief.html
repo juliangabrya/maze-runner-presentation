@@ -97,9 +97,11 @@
     <nav class="toc">
       <a href="#summary">30-second summary</a>
       <a href="#team">Team</a>
+      <a href="#running">Running order</a>
       <a href="#numbers">Key numbers</a>
       <a href="#how">How it works</a>
       <a href="#rule">The rule</a>
+      <a href="#demo">Demo maze</a>
       <a href="#constants">Constants</a>
       <a href="#glossary">Glossary</a>
       <a href="#qa">Q&amp;A</a>
@@ -119,6 +121,21 @@
       <div class="card"><h3>Julian G</h3><p><span class="accent">Systems &amp; radio.</span> The run loop and the route hand-off.</p></div>
       <div class="card"><h3>Sam</h3><p><span class="accent">Testing &amp; drive.</span> Motor tuning, maze trials, the live demo.</p></div>
     </div>
+  </section>
+
+  <section id="running">
+    <h2><span class="n">02·5</span> Running order &amp; who speaks</h2>
+    <p style="color:#cdd6f5;font-size:14.5px">~20 minutes total. <b style="color:var(--lime)">Julian&nbsp;G</b> leads the main beats; the others take the smaller, focused parts.</p>
+    <table>
+      <thead><tr><th>Speaker</th><th>Slides</th><th>—</th></tr></thead>
+      <tbody>
+        <tr><td>Julian&nbsp;G <span style="color:var(--lime)">(lead)</span></td><td class="mono">main</td><td>Intro · Why it matters · Mission · The strategy · <b style="color:#fff">Live demo</b> · Results · Future · Thank-you</td></tr>
+        <tr><td>Abhi</td><td class="mono">logic</td><td>The loop · The code · Thought process · Challenges</td></tr>
+        <tr><td>Julian&nbsp;C</td><td class="mono">tech</td><td>Architecture · How it sees · The dials · Impact</td></tr>
+        <tr><td>Sam</td><td class="mono">build</td><td>Hardware · The hand-off · Applications · What we learned</td></tr>
+        <tr><td>Everyone</td><td class="mono">Q&amp;A</td><td>Take questions together at the end</td></tr>
+      </tbody>
+    </table>
   </section>
 
   <section id="numbers">
@@ -150,6 +167,15 @@
       <div class="card"><h3>The guarantee</h3><p>For a "perfect" maze (no closed loops), the walls form one connected surface — so a wall-follower visits every cell and must reach the goal. We also cap the number of moves as a safety net.</p></div>
     </div>
     <p style="margin-top:16px;color:#cdd6f5;font-size:14.5px">Route notation broadcast over radio: <span class="mono" style="color:var(--lime)">L</span> = left, <span class="mono" style="color:var(--lime)">R</span> = right, <span class="mono" style="color:var(--lime)">F</span> = forward, <span class="mono" style="color:var(--lime)">B</span> = back. e.g. <span class="mono" style="color:var(--cyan)">L F F R L</span>.</p>
+  </section>
+
+  <section id="demo">
+    <h2><span class="n">05·5</span> The demo &amp; the real maze</h2>
+    <div class="grid g2">
+      <div class="card"><h3>On screen</h3><p>The demo slide shows our <span class="accent">real 5×5 maze</span> being solved live, with the thinking panel. <span class="accent">Random Maze</span> proves it works on any layout; re-open the slide to return to the real one.</p></div>
+      <div class="card"><h3>On the floor</h3><p>Build it from books/boxes to the plan in <span class="accent">maze-plan.html</span>. It's guaranteed solvable by the left-hand rule. Robot starts top-left facing <b>East</b>; solution is <span class="mono" style="color:var(--lime)">R F F F L L R L R R F L</span> (12 moves).</p></div>
+    </div>
+    <p style="margin-top:14px;color:#cdd6f5;font-size:14.5px">⚠ Set <span class="mono" style="color:var(--lime)">MAX_MOVES ≥ 12</span> on the robot or it stops before the goal. Full build steps &amp; diagram: <span class="mono" style="color:var(--cyan)">maze-plan.html</span>.</p>
   </section>
 
   <section id="constants">

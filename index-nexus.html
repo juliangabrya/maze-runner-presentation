@@ -614,7 +614,7 @@
       <h2 data-rise style="--i:1" style="font-size:clamp(28px,4.4vw,58px)">Left-hand rule, live</h2>
       <div class="demo-wrap">
         <div class="canvas-shell" data-rise style="--i:2">
-          <span class="corner tl mono">MAZE // 8×8 · PERFECT</span>
+          <span class="corner tl mono">MAZE // 5×5 · OUR BUILD</span>
           <span class="corner br mono">CUTEBOT · LEFT-HAND</span>
           <canvas id="maze" width="720" height="720"></canvas>
           <div class="cap">
@@ -638,11 +638,10 @@
           <div class="tline"><span>MOVES</span><span id="t-count">0</span></div>
           <div class="tline"><span>ROUTE</span><span id="t-route" style="color:var(--magenta)">—</span></div>
           <button class="btn alt" id="t-stop">■ STOP</button>
-          <button class="btn" id="t-reset">⟳ NEW MAZE</button>
+          <button class="btn" id="t-reset">⟳ RANDOM MAZE</button>
           <p class="muted" style="font-size:13px;margin-top:16px;line-height:1.5">
-            The Cutebot drives the real left-hand rule: <span class="cyan">sense</span> the
-            three walls, <span class="lime">decide</span> a turn, <span class="mag">act</span>.
-            The magenta line is its trail.
+            This is our <span class="lime">real 5×5 maze</span> — the one we built. It solves the same way
+            on screen and on the floor. <span class="cyan">Random Maze</span> proves it works on any layout.
           </p>
         </div>
       </div>
@@ -851,7 +850,8 @@ slides.forEach((_,i)=>{
 const dots=[...dotsWrap.children];
 
 // who presents each slide
-const SPEAKERS=['The Team','The Team','Julian G','Julian G','Sam','Sam','Julian C','Abhi','Julian C','Julian G','Sam','Julian C','Abhi','Julian G','Abhi','Sam','Julian G','Abhi','Julian C','Julian G','The Team','Abhi · Julian C · Julian G · Sam'];
+// Julian G leads the main slides; Abhi, Julian C & Sam take the smaller ones
+const SPEAKERS=['Julian G','The Team','Julian G','Julian G','Sam','Julian C','Julian C','Abhi','Abhi','Julian G','Julian G','Julian C','Abhi','Sam','Abhi','Julian G','Sam','Sam','Julian C','Julian G','Julian G','Abhi · Julian C · Julian G · Sam'];
 const spkName=document.getElementById('spk-name');
 
 // terminal "decode" text scramble
@@ -908,7 +908,10 @@ go(0);
 /* ===================== MAZE DEMO ===================== */
 const demo=(()=>{
   const cv=document.getElementById('maze'), ctx=cv.getContext('2d');
-  const N=8, S=720, cell=S/N, pad=cell/2;
+  const N=5, S=720, cell=S/N, pad=cell/2;
+  // our real, hand-built maze — walls present bitmask (N=1,E=2,S=4,W=8). Guaranteed left-hand solvable.
+  const FIXED=[[11,9,1,5,7],[10,10,12,5,3],[10,14,9,3,10],[10,9,6,10,10],[12,6,13,4,6]];
+  let fixedMode=true;
   // headings: 0=N 1=E 2=S 3=W
   const DX=[0,1,0,-1], DY=[-1,0,1,0], WN=['N','E','S','W'], HEAD=['NORTH','EAST','SOUTH','WEST'];
   const REL=['STRAIGHT','RIGHT','BACK','LEFT']; // index by (dir-heading+4)%4
@@ -923,18 +926,23 @@ const demo=(()=>{
 
   // ---- maze generation: recursive-backtracker perfect maze ----
   function gen(){
-    cells=Array.from({length:N},()=>Array.from({length:N},()=>({N:true,E:true,S:true,W:true,seen:false,g:false})));
-    const st=[[0,0]]; cells[0][0].g=true;
-    const opp={N:'S',S:'N',E:'W',W:'E'};
-    while(st.length){
-      const [x,y]=st[st.length-1], nb=[];
-      if(y>0&&!cells[y-1][x].g)nb.push(['N',x,y-1]);
-      if(x<N-1&&!cells[y][x+1].g)nb.push(['E',x+1,y]);
-      if(y<N-1&&!cells[y+1][x].g)nb.push(['S',x,y+1]);
-      if(x>0&&!cells[y][x-1].g)nb.push(['W',x-1,y]);
-      if(!nb.length){st.pop();continue;}
-      const [d,nx,ny]=nb[(Math.random()*nb.length)|0];
-      cells[y][x][d]=false; cells[ny][nx][opp[d]]=false; cells[ny][nx].g=true; st.push([nx,ny]);
+    if(fixedMode){
+      // decode our real built maze from the wall bitmask
+      cells=FIXED.map(row=>row.map(b=>({N:!!(b&1),E:!!(b&2),S:!!(b&4),W:!!(b&8),seen:false,g:true})));
+    } else {
+      cells=Array.from({length:N},()=>Array.from({length:N},()=>({N:true,E:true,S:true,W:true,seen:false,g:false})));
+      const st=[[0,0]]; cells[0][0].g=true;
+      const opp={N:'S',S:'N',E:'W',W:'E'};
+      while(st.length){
+        const [x,y]=st[st.length-1], nb=[];
+        if(y>0&&!cells[y-1][x].g)nb.push(['N',x,y-1]);
+        if(x<N-1&&!cells[y][x+1].g)nb.push(['E',x+1,y]);
+        if(y<N-1&&!cells[y+1][x].g)nb.push(['S',x,y+1]);
+        if(x>0&&!cells[y][x-1].g)nb.push(['W',x-1,y]);
+        if(!nb.length){st.pop();continue;}
+        const [d,nx,ny]=nb[(Math.random()*nb.length)|0];
+        cells[y][x][d]=false; cells[ny][nx][opp[d]]=false; cells[ny][nx].g=true; st.push([nx,ny]);
+      }
     }
     bot={x:0,y:0,h:1,fx:0,fy:0,angle:0,moves:0,trail:[[0,0]],route:[],done:false,t:0,endT:null,
          states:new Set(['0,0,1']),reset:false};
@@ -1003,7 +1011,7 @@ const demo=(()=>{
   }
   function update(dt){
     if(bot.reset){ kick(); return; }
-    if(bot.done){ if(bot.t-bot.endT>140)kick(); return; }
+    if(bot.done){ if(!fixedMode && bot.t-bot.endT>140)randomKick(); return; }
     if(phase==='sense'){
       if(tmr===0)choose(); tmr+=dt;
       const p=Math.min(1,tmr/SENSE_MS);
@@ -1126,9 +1134,11 @@ const demo=(()=>{
     set('t-status','EXPLORING'); set('t-head','EAST'); set('t-count','0'); set('t-route','—');
     set('t-left','—'); set('t-front','—'); set('t-right','—');
     resetBrain();
-    cap('①','SENSE — Cutebot powering up','left-hand rule engaged · cell ≈ '+CELL_MM+'mm');
+    cap('①', fixedMode?'SENSE — our real 5×5 maze':'SENSE — random maze','left-hand rule engaged · solves it every time');
     anim=requestAnimationFrame(frame);
   }
+  function showFixed(){ fixedMode=true; kick(); }      // the real, hand-built maze (matches the floor)
+  function randomKick(){ fixedMode=false; kick(); }    // a fresh random maze (shows it generalises)
   function setStopBtn(stopped){ const b=$('t-stop'); if(!b)return; b.textContent=stopped?'▶ RESUME':'■ STOP'; b.classList.toggle('stopped',stopped); }
   function pauseLoop(){ running=false; cancelAnimationFrame(anim); }
   function resumeLoop(){ if(!bot)return; running=true; last=0; cancelAnimationFrame(anim); anim=requestAnimationFrame(frame); }
@@ -1139,7 +1149,7 @@ const demo=(()=>{
   }
   function stop(){ pauseLoop(); }   // external freeze, no regeneration
 
-  $('t-reset').onclick=kick;
+  $('t-reset').onclick=randomKick;
   $('t-stop').onclick=toggleStop;
   // spacebar advances slides, so use S to stop/resume on the demo slide
   window.addEventListener('keydown',e=>{ if((e.key==='s'||e.key==='S') && idx===10){ e.preventDefault(); toggleStop(); } });
@@ -1147,7 +1157,7 @@ const demo=(()=>{
     if(document.hidden){ pauseLoop(); }
     else if(idx===10 && !paused){ resumeLoop(); }
   });
-  return {kick,stop};
+  return {kick:showFixed, stop};   // entering the slide always shows our real maze
 })();
 
 /* ===================== SHARED POINTER ===================== */
