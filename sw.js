@@ -1,6 +1,6 @@
 /* Maze Runner — offline service worker.
    Caches every page on first online visit, then serves from cache. */
-const CACHE = 'maze-runner-v1';
+const CACHE = 'maze-runner-v2';
 const PRECACHE = [
   './',
   'index.html',
@@ -14,7 +14,10 @@ const PRECACHE = [
   'script.html',
   'maze-runner.ts',
   'manifest.webmanifest',
-  'icon.svg'
+  'icon.svg',
+  'apple-touch-icon.png',
+  'icon-192.png',
+  'icon-512.png'
 ];
 
 self.addEventListener('install', e => {

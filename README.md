@@ -35,10 +35,17 @@ Everything is **pure HTML/CSS/JS — no build step, no dependencies.** Just open
 
 The left-hand rule is *mathematically guaranteed* to solve any perfect maze.
 
-## 📶 Works offline
-The site is a PWA — a service worker (`sw.js`) caches every page on the **first online visit**.
-After that, the link keeps working with **no internet** (e.g. on the day, on school Wi‑Fi, or in airplane mode).
-Tip: open the link once while online and click through each page so fonts cache too.
+## 📶 Works offline / 📲 Install on iPad
+The site is a PWA — a service worker (`sw.js`) caches every page on the **first online visit**, then the link keeps working with **no internet**.
+
+**Add it to an iPad like an app:**
+1. Open the link in **Safari**.
+2. Tap the **Share** button `[ ↑ ]`.
+3. Tap **“Add to Home Screen”**.
+4. Launch the new **Maze Runner** icon — it runs full-screen and works offline.
+
+(Android/Chrome: menu ⋮ → **Install app**. Laptop: install icon in the address bar.)
+Do this once on Wi‑Fi, and click through each deck so the fonts cache too.
 
 ---
 *Hosted with GitHub Pages — just share the link.*
