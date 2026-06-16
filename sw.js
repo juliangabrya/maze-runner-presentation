@@ -1,6 +1,6 @@
 /* Maze Runner — offline service worker.
    Caches every page on first online visit, then serves from cache. */
-const CACHE = 'maze-runner-v2';
+const CACHE = 'maze-runner-v3';
 const PRECACHE = [
   './',
   'index.html',
