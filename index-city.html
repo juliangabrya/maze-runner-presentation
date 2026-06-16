@@ -1050,5 +1050,6 @@ addEventListener('pointermove',e=>{MX=e.clientX;MY=e.clientY;MA=1;},{passive:tru
     el.style.transform='translate('+(cx-170)+'px,'+(cy-170)+'px)'; requestAnimationFrame(trail); })();
 })();
 </script>
+<script>if('serviceWorker'in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});</script>
 </body>
 </html>

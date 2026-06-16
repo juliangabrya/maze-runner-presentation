@@ -227,5 +227,6 @@ basic.clearScreen()
   }catch(e){ const r=document.createRange();r.selectNode(document.getElementById('code'));
     getSelection().removeAllRanges();getSelection().addRange(r);document.execCommand('copy'); btn.textContent='✓ Copied!'; } };
 </script>
+<script>if('serviceWorker'in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});</script>
 </body>
 </html>

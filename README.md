@@ -35,5 +35,10 @@ Everything is **pure HTML/CSS/JS — no build step, no dependencies.** Just open
 
 The left-hand rule is *mathematically guaranteed* to solve any perfect maze.
 
+## 📶 Works offline
+The site is a PWA — a service worker (`sw.js`) caches every page on the **first online visit**.
+After that, the link keeps working with **no internet** (e.g. on the day, on school Wi‑Fi, or in airplane mode).
+Tip: open the link once while online and click through each page so fonts cache too.
+
 ---
 *Hosted with GitHub Pages — just share the link.*

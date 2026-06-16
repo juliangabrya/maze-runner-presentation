@@ -1,0 +1,13 @@
+{
+  "name": "Maze Runner",
+  "short_name": "Maze Runner",
+  "description": "Autonomous micro:bit maze-solving robot — presentation",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0820",
+  "theme_color": "#0a0820",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
